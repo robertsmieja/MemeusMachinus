@@ -110,7 +110,7 @@ DiscordBot.on('guildMemberAdd', async(member) => {
 		await member.kick("Spambot eliminated");
 	} else {
 		setTimeout(() => {
-			member.addRole(guild.roles.find("name", "Bunch of nerds"));
+			member.addRole(DiscordBot.roles.find("name", "Bunch of nerds"));
 		}, 120000) // 2 minutes
 		await introductionsChannel.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
 	}
