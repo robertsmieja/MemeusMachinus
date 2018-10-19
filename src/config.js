@@ -88,6 +88,12 @@ function configure() {
 		console.log("./info/intros.json created. This should be a comma separated list of introduction strings to send when a new user joins.");
 	}	
 	
+	if (!fs.existsSync("./info/twitch.json")) {
+		didConfigure = true;
+		fs.writeFileSync("./info/twitch.json", "[]", "utf8");
+		console.log("./info/twitch.json created. This should be a comma separated list of streamers for stream alerts.");
+	}	
+	
 	if (didConfigure) {
 		console.log("Configuration complete.");
 		console.log("The bot may not work properly until the created files are populated with accurate information, if applicable.");
