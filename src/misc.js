@@ -103,7 +103,7 @@ async function botReply(message, DiscordBot) {
 }
 
 async function cacheRoleMessages(DiscordBot) {
-	await DiscordBot.channels.get(ids.roleassignment).fetchMessages({limit: 50}); //get back messages from the #role-assignment channel
+	/*await DiscordBot.channels.get(ids.roleassignment).fetchMessages({limit: 50}); //get back messages from the #role-assignment channel
 	let messages = DiscordBot.channels.get(ids.roleassignment).messages;
 	let keys = messages.keyArray();
 	for (let i = 0; i < keys.length; i++) {
@@ -119,7 +119,7 @@ async function cacheRoleMessages(DiscordBot) {
 			}
 		}
 	}
-	process.stdout.write("Cached role messages. ");
+	process.stdout.write("Cached role messages. ");*/
 }
 
 function attachIsImage(msgAttach) {
