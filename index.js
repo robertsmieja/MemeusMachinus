@@ -130,6 +130,6 @@ DiscordBot.on('ready', async () => {
 	console.log('MemeusMachinus is ready');
 	DiscordBot.setMaxListeners(0); //done to ensure it responds to everything regardless of how busy the server gets
 	await DiscordBot.user.setActivity("Type !help for commands!");
-	await misc.cacheRoleMessages(DiscordBot);
+	//await misc.cacheRoleMessages(DiscordBot);
 });
 
