@@ -111,7 +111,7 @@ DiscordBot.on('guildMemberAdd', async(member) => {
 	} else {
 		setTimeout(() => {
 			guild.member(message.author).addRole(guild.roles.find("name", "Bunch of nerds"));
-		}, 300000) // 5 minutes
+		}, 120000) // 2 minutes
 		await introductionsChannel.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
 	}
 });

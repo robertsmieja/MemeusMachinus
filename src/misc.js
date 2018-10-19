@@ -102,26 +102,6 @@ async function botReply(message, DiscordBot) {
 	return await message.channel.send(emote.toString());
 }
 
-async function cacheRoleMessages(DiscordBot) {
-	/*await DiscordBot.channels.get(ids.roleassignment).fetchMessages({limit: 50}); //get back messages from the #role-assignment channel
-	let messages = DiscordBot.channels.get(ids.roleassignment).messages;
-	let keys = messages.keyArray();
-	for (let i = 0; i < keys.length; i++) {
-		let reactionKeys = messages.get(keys[i]).reactions.keyArray();
-		for (let j = 0; j < reactionKeys.length; j++) {
-			let reactedUsers = await messages.get(keys[i]).reactions.get(reactionKeys[j]).fetchUsers();
-			reactedUsers = reactedUsers.array();
-			for (let k = 0; k < reactedUsers.length; k++) {
-				if (DiscordBot.user != reactedUsers[k]) {
-					console.log("Attempting to remove " + reactedUsers[k].tag);
-					await messages.get(keys[i]).reactions.get(reactionKeys[j]).remove(reactedUsers[k]);
-				}
-			}
-		}
-	}
-	process.stdout.write("Cached role messages. ");*/
-}
-
 function attachIsImage(msgAttach) {
     let url = msgAttach.url;
     //True if this url is a PNG or JPG image. Kind of hacky to ignore case
@@ -137,7 +117,7 @@ module.exports.delay = delay;
 module.exports.roleInRoles = roleInRoles;
 module.exports.memberIsMod = memberIsMod;
 module.exports.memberHasRole = memberHasRole;
-module.exports.cacheRoleMessages = cacheRoleMessages;
+//module.exports.cacheRoleMessages = cacheRoleMessages;
 module.exports.ids = ids;
 module.exports.botReply = botReply;
 module.exports.reminders = reminders;
