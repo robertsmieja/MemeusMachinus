@@ -2,8 +2,8 @@
 	config.js
 
 	Handles CGCC Bot configuration on startup -- will alert the user to missing files, create them if necessary, etc.
-	(C) Adam Gincel 2018
-	Modified by Tyler "NFreak" Morrow for the CGCC Discord Server.
+    Written by Adam "WaveParadigm" Gincel for the Icons: Combat Arena Discord Server.
+    Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 
 const fs = require("fs");
@@ -88,18 +88,6 @@ function configure() {
 		console.log("./info/intros.json created. This should be a comma separated list of introduction strings to send when a new user joins.");
 	}	
 	
-	if (!fs.existsSync("./info/challenge.json")) {
-		didConfigure = true;
-		fs.writeFileSync("./info/challenge.json", "[]", "utf8");
-		console.log("./info/challenge.json created. This contains entries to the current CGCC challenge.");
-	}
-	
-	if (!fs.existsSync("./info/votes.json")) {
-		didConfigure = true;
-		fs.writeFileSync("./info/votes.json", "[]", "utf8");
-		console.log("./info/votes.json created. This contains votes to the current CGCC challenge.");
-	}
-
 	if (didConfigure) {
 		console.log("Configuration complete.");
 		console.log("The bot may not work properly until the created files are populated with accurate information, if applicable.");

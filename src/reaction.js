@@ -3,7 +3,7 @@
     Handles all things related to reactions and emoji.
 
     Written by Adam "WaveParadigm" Gincel for the Icons: Combat Arena Discord Server.	
-    Modified by Tyler "NFreak" Morrow for the CGCC Discord Server.
+    Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord Server.
 */
 
 const fs = require("fs");
@@ -11,20 +11,11 @@ const misc = require("./misc.js");
 
 let removeReacts = true;
 const emojiRoleDict = {
-	"cgccPurple": "Button Creator",
-	"cgccGreen": "Controller Painter",
-	"cgccOrange": "Functional Modder",
-	"cgccTeal": "Electrical Modder",
-	"cgccLime": "Graphic Designer",
-	"cgccPink": "Cable Modder"
+	// Nothing yet
 }
 
 function emojiToRole(emojiName, messageID) {
 	let ret = emojiRoleDict[emojiName];
-	
-	if (messageID == misc.ids.secondary) {
-		ret += " (Secondary)";
-	}
 	return ret;
 }
 

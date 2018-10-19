@@ -3,7 +3,7 @@
     Contains useful miscellaneous functions used throughout the bot.
 
     Written by Adam "WaveParadigm" Gincel for the Icons: Combat Arena Discord Server.
-    Modified by Tyler "NFreak" Morrow for the CGCC Discord Server.
+    Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 const fs = require("fs");
 const request = null;
@@ -66,7 +66,7 @@ function checkReminders() {
 
 function memberIsMod(message) {
 	let ret = false;
-	const modNames = ["Admins", "Moderators", "Founders", "StickBot"];
+	const modNames = ["It me", "Special Dads", "Robot uprising", "Dads"];
 	for (let i = 0; i < modNames.length; i++) {
 		ret = ret || memberHasRole(message, modNames[i]);		
 	}
@@ -94,7 +94,7 @@ function roleInRoles(roleName, roles) {
 
 async function botReply(message, DiscordBot) {
 	let a = Math.floor(Math.random() * 10);
-	let s = ["dongchamp", "puffWhat", "thinkRespirator", "thinkController", "neutralRespirator", "KillMe", "antzodia", "ditto", "angryRespirator"];
+	let s = ["wah", "puffWhat", "gunRight", "nfreakW", "stopthis", "expand", "falconPropane", "angery", "doot", "nfreakHi", "spicyoil", "nfreakSoy", "thumbsUp"];
 	let selectedName = s[Math.floor(Math.random() * s.length)];
 	
 	let emote = DiscordBot.emojis.find("name", selectedName);
@@ -122,24 +122,6 @@ async function cacheRoleMessages(DiscordBot) {
 	process.stdout.write("Cached role messages. ");
 }
 
-async function galleryImagesOnly(message) {
-	if (message.channel.name == "gallery") { 
-		console.log("New message posted in gallery");
-		if (!(message.attachments.size > 0 && message.attachments.every(attachIsImage))) {
-		    message.delete();
-		    console.log("Deleted non-image post from #gallery from user " + message.author);
-		}
-	}
-}
-
-async function removeContributor(message) {
-	let guild = message.member.guild;
-	if (message.channel.name == "resources") { 
-		console.log("New message posted in resources");
-		await guild.member(message.author).removeRole(guild.roles.find("name", "Contributor"));
-	}
-}
-
 function attachIsImage(msgAttach) {
     let url = msgAttach.url;
     //True if this url is a PNG or JPG image. Kind of hacky to ignore case
@@ -157,8 +139,6 @@ module.exports.memberIsMod = memberIsMod;
 module.exports.memberHasRole = memberHasRole;
 module.exports.cacheRoleMessages = cacheRoleMessages;
 module.exports.ids = ids;
-module.exports.galleryImagesOnly = galleryImagesOnly;
-module.exports.removeContributor = removeContributor;
 module.exports.botReply = botReply;
 module.exports.reminders = reminders;
 module.exports.addReminder = addReminder;

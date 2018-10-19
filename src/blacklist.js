@@ -3,8 +3,8 @@
 
     Handles adding/removing to/from a given blacklist, removing messages containing those words and/or notifying mods about messages that may or may not contain them.
 
-    Written by Adam "WaveParadigm" Gincel for the Icons: Combat Arena Discord Server.	
-	Modified by Tyler "NFreak" Morrow for the CustomGCC Discord server.
+    Written by Adam "WaveParadigm" Gincel for the Icons: Combat Arena Discord Server.
+    Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 
 const fs = require("fs");
@@ -68,7 +68,7 @@ function censorshipInfoAddWarning(user, word) {
 }
 
 async function blacklistAlertMods(message, violatingWord, warning) {
-	let violationChannel = message.guild.channels.find("name", "bot-log");
+	let violationChannel = message.guild.channels.find("name", "action-log");
 	let bars = "----------------------\n";
 	if (!warning)
 		return await violationChannel.send(bars + "Removed message with violation (`" + violatingWord + "`) in #" + message.channel.name + " posted by `@" + message.author.tag + "`:\n`" + message.content + "`");
