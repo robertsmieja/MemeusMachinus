@@ -109,6 +109,9 @@ DiscordBot.on('guildMemberAdd', async(member) => {
 		member.send("Spambots are not welcome in this server. If you believe this was in error, remove the URL or spam phrase from your username before rejoining.");
 		await member.kick("Spambot eliminated");
 	} else {
+		setTimeout(() => {
+			guild.member(message.author).addRole(guild.roles.find("name", "Bunch of nerds"));
+		}, 300000) // 5 minutes
 		await introductionsChannel.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
 	}
 });
