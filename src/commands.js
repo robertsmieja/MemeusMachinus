@@ -391,6 +391,7 @@ async function modCommands(message, args) {
 }
 
 async function userCommands(message, args) {
+	let userHelpString = "";
 	if (args[0] == "!help") {
 		for (let i = 0; i < userCommandList.length; i++) {
 			if (!userCommandList[i].hide){
