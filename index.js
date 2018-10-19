@@ -53,8 +53,8 @@ DiscordBot.on('message', async message => {
 		await commands.modCommands(message, args);
 		await blacklist.handleBlacklistCommands(message, args);
 
-		if (args[0] == "=refresh") //needs to use the DiscordBot object directly, so it's in index
-			await misc.cacheRoleMessages(DiscordBot);
+		//if (args[0] == "=refresh") //needs to use the DiscordBot object directly, so it's in index
+		//	await misc.cacheRoleMessages(DiscordBot);
 	}
 
 	// Check all messages for userCommands
@@ -72,10 +72,10 @@ DiscordBot.on('message', async message => {
 	}
 
 	//Every `updateCacheEvery` messages, update the cache to hopefully ensure the reaction messages are never bumped out of cache
-	if (++numMessages >= updateCacheEvery) {
-		numMessages = 0;
-		await misc.cacheRoleMessages(DiscordBot);
-	}
+	//if (++numMessages >= updateCacheEvery) {
+	//	numMessages = 0;
+	//	await misc.cacheRoleMessages(DiscordBot);
+	//}
 
 	let reminderToSend = misc.checkReminders();
 	if (reminderToSend) {
@@ -101,8 +101,8 @@ DiscordBot.on("voiceStateUpdate", async(oldMember, newMember) => {
 
 //Executed upon a new user joining the server
 DiscordBot.on('guildMemberAdd', async(member) => {
-	let introductionsChannel = DiscordBot.channels.get(misc.ids.introductions);
-	var rulesAndRoles = " You'll be granted a Member role very soon. Be sure to read through "+ DiscordBot.channels.get(misc.ids.rules) + "!";
+	let introductionsChannel = mainGuild.channels.get(misc.ids.introductions);
+	var rulesAndRoles = " You'll be granted a Member role very soon. Be sure to read through "+ mainGuild.channels.get(misc.ids.rules) + "!";
 	var ran = Math.floor(Math.random() * intros.length);
 	if (member.displayName.includes("discord.gg") || member.displayName.includes("free games") || member.displayName.includes("free ow") || member.displayName.includes("twitch.tv")){
 		console.log("Kicking a spambot: " + member.displayName);
@@ -110,7 +110,7 @@ DiscordBot.on('guildMemberAdd', async(member) => {
 		await member.kick("Spambot eliminated");
 	} else {
 		setTimeout(() => {
-			member.addRole(DiscordBot.roles.find("name", "Bunch of nerds"));
+			member.addRole(mainGuild.roles.find("name", "Bunch of nerds"));
 		}, 120000) // 2 minutes
 		await introductionsChannel.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
 	}
