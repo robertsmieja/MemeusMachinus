@@ -94,6 +94,12 @@ function configure() {
 		console.log("./info/twitch.json created. This should be a comma separated list of streamers for stream alerts.");
 	}	
 	
+	if (!fs.existsSync("./info/spam.json")) {
+		didConfigure = true;
+		fs.writeFileSync("./info/spam.json", "[]", "utf8");
+		console.log("./info/spam.json created");
+	}
+	
 	if (didConfigure) {
 		console.log("Configuration complete.");
 		console.log("The bot may not work properly until the created files are populated with accurate information, if applicable.");
