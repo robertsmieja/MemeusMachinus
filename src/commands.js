@@ -13,6 +13,9 @@ let todoList = JSON.parse(fs.readFileSync("./info/todo.json", "utf8"));
 let userCommandList = JSON.parse(fs.readFileSync("./info/userCommands.json", "utf8"));
 let streamerList = JSON.parse(fs.readFileSync("./info/twitch.json", "utf8"));
 
+//Spambot detection
+let spamlist = JSON.parse(fs.readFileSync("./info/spam.json", "utf8"));
+
 let commandPrefix = "!";
 let helpString = ["", ""];
 
@@ -30,7 +33,7 @@ helpString[0] += "`!say CHANNEL MESSAGE` - Send any message to any channel.\n";
 helpString[0] += "`!purge CHANNEL NUMBER` - Delete NUMBER messages from CHANNEL.\n";
 helpString[0] += "`!remindme DAYS MESSAGE` - Send an automatic message to the bot-spam channel after `DAYS` days have passed.\n";
 
-helpString[1] += "`!emotelist EMOTES` - The list of emotes to add to a message when reacting with this server's role emote.\n";
+helpString[1] += "`!emotelist EMOTES` - The list of emotes to add to a message when reacting with :cgccWhite:.\n";
 helpString[1] += "`!todo` - Display the todo list.\n";
 helpString[1] += "`!todo add task` - Adds `task` to the todo list.\n";
 helpString[1] += "`!todo remove task` - Removes `task` from the todo list. Either by string or number.\n";
@@ -40,7 +43,9 @@ helpString[1] += "`!blacklist remove word` - Remove `word` from the blacklist.\n
 helpString[1] += "`!blacklist violations ID|Tag` - List all words that were removed as violations from a user with that ID or Tag.\n";
 helpString[1] += "`!blacklist warnings ID|Tag` - List all words that were flagged as warnings from a user with that ID or Tag.\n";
 helpString[1] += "`!log` - Print a log of all users with recorded blacklist warnings or infractions.\n";
-helpString[1] += "`!logfile` - Send a .csv file containing users and the quantity of violations/warnings.\n"
+helpString[1] += "`!logfile` - Send a .csv file containing users and the quantity of violations/warnings.\n";
+helpString[1] += "`!spambots add word' - Add a string to the new user spambot filter\n";
+helpString[1] += "`!spambots remove word' - Remove a string from the spambot filter\n";
 
 
 
@@ -237,45 +242,6 @@ async function modCommands(message, args) {
 		} else {
 			return await message.channel.send("Invalid number of days provided.");
 		}
-	/*} else if (args[0] == "!roleassign") {
-		console.log("Setting up role assignment channel");
-		await message.channel.send({
-			files: [{
-				attachment: "./img/HeaderRoles.png",
-				name: "HeaderRoles.png"
-			}]
-		});
-		await message.channel.send("CGCC has a number of controller modding skill roles! Here, you can use Discord reactions to assign your server-wide roles. Just click on the color-coded emote reactions below, and you'll be automatically assigned a role. To remove a role from yourself, just react again!");
-		await message.channel.send({
-			files: [{
-				attachment: "./img/Roles1.png",
-				name: "Roles1.png"
-			}]
-		});await message.channel.send({
-			files: [{
-				attachment: "./img/Roles2.png",
-				name: "Roles2.png"
-			}]
-		});await message.channel.send({
-			files: [{
-				attachment: "./img/Roles3.png",
-				name: "Roles3.png"
-			}]
-		});
-		await message.channel.send("**Set your roles below**");
-		await message.channel.send("*Your primary role is your strongest skill, and also sets your name color. Secondary roles are for anything else you work with or dabble in!*");
-		await message.channel.send({
-			files: [{
-				attachment: "./img/RolesPrimary.png",
-				name: "RolesPrimary.png"
-			}]
-		});
-		await message.channel.send({
-			files: [{
-				attachment: "./img/RolesSecondary.png",
-				name: "RolesSecondary.png"
-			}]
-		});*/
 	} else if (args[0] == "!emotelist") {
 		if (args.length > 1) {
 			let arr = [];
@@ -413,6 +379,38 @@ async function modCommands(message, args) {
 			return await message.channel.send(s + args[1] + s2 + "stream alerts! Check them out at twitch.tv/" + args[2]);
 		}
 	} 
+	else if (args[0] == "!spambots") {
+		if (args.length == 1) {
+			let str = "Words on the spambot filter: \n`";
+			for (let i = 0; i < spamlist.length; i++) {
+				str += spamlist[i] + "\n";
+			}
+			str += "`";
+			return await message.channel.send(str);
+		}
+		else if (args.length > 1 && args[1] == "add") {
+			if (args.length > 2) {
+				spamlist.push(args[2]);
+				fs.writeFileSync('./info/spamlist.json', JSON.stringify(spamlist), 'utf8');
+				await message.channel.send("`" + args[2] + "` has been added to the spamlist.");
+			} else {
+				await message.channel.send("Usage: `!spamlist add word`");
+			}
+		} else if (args.length > 1 && args[1] == "remove") {
+			if (args.length > 2) {
+				let ind = spamlist.indexOf(args[2]);
+				if (ind > -1) {
+					spamlist.splice(ind, 1);
+					fs.writeFileSync('./info/spamlist.json', JSON.stringify(spamlist), 'utf8');
+					await message.channel.send("`" + args[2] + "` has been removed from the spamlist.");
+				} else {
+					await message.channel.send("`" + args[2] + "` was not found in the spamlist.");
+				}
+			} else {
+				await message.channel.send("Usage: `!spamlist remove word`");
+			}
+		}
+	}
 }
 
 async function userCommands(message, args) {
