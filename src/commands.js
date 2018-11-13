@@ -423,6 +423,19 @@ async function userCommands(message, args) {
 		}
 		return await message.channel.send("Here's a list of commands for all users:\n" + userHelpString);
 	}
+	else if (args[0] == "!meme"){
+		var ran = Math.floor(Math.random() * 242);
+		try {
+			return await message.channel.send({
+				files: [{
+					attachment: "./img/meme/meme" + ran +".png",
+					name: "meme" + ran +".png"
+				}]
+			});
+		} catch (e) {
+			retirm awaot message.channel.send("ice cream machine broke");
+		}
+	}
 	else if (args[0].startsWith(commandPrefix)) {
 		for (let i = 0; i < userCommandList.length; i++) {
 			//check through all defined userCommands
