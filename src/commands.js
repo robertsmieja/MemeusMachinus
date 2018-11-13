@@ -433,7 +433,7 @@ async function userCommands(message, args) {
 				}]
 			});
 		} catch (e) {
-			retirm awaot message.channel.send("ice cream machine broke");
+			return await message.channel.send("ice cream machine broke");
 		}
 	}
 	else if (args[0].startsWith(commandPrefix)) {
