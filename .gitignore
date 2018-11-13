@@ -2,5 +2,6 @@
 /info/*.json
 /info/*.csv
 /info/*.txt
+/img/meme/*
 /node_modules/
 *.sh
