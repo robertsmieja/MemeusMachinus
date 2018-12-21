@@ -28,13 +28,13 @@ function censorshipToCSV() {
 
 function censorshipUserByIdOrTag(user) {
 	//check if exists by Id
-	if (censorshipInfo[user] != undefined) {
+	if (censorshipInfo[user] !== undefined) {
 		return censorshipInfo[user];
 	} else {
 		let keys = Object.keys(censorshipInfo);
 		for (let i = 0; i < keys.length; i++) {
 			let u = censorshipInfo[keys[i]];
-			if (u.tag.toLowerCase() == user)
+			if (u.tag.toLowerCase() === user)
 				return u;
 		}
 		return null;
@@ -90,7 +90,7 @@ async function handleBlacklist(message, DiscordBotTag) {
 			break;
 		}
 	}
-	if (censoredWord && message.author.tag != DiscordBotTag && !misc.memberIsMod(message) && !(misc.memberIsMod(message) && message.content.startsWith("!blacklist")) && blacklistIgnore.indexOf(message.channel.id) == -1) {
+	if (censoredWord && message.author.tag !== DiscordBotTag && !misc.memberIsMod(message) && !(misc.memberIsMod(message) && message.content.startsWith("!blacklist")) && blacklistIgnore.indexOf(message.channel.id) == -1) {
 		await message.delete();
 
 		try {
@@ -134,15 +134,15 @@ async function handleBlacklistPotential(message, DiscordBotTag) {
 			}
 		}
 	}
-	if (potentialViolation && message.author.tag != DiscordBotTag && !misc.memberIsMod(message) && !(misc.memberIsMod(message) && message.content.startsWith("!blacklist")) && blacklistIgnore.indexOf(message.channel.id) == -1) {
+	if (potentialViolation && message.author.tag !== DiscordBotTag && !misc.memberIsMod(message) && !(misc.memberIsMod(message) && message.content.startsWith("!blacklist")) && blacklistIgnore.indexOf(message.channel.id) == -1) {
 		await blacklistAlertMods(message, potentialViolation, true);
 		censorshipInfoAddWarning(message.author, potentialViolation);
 	}
 }
 
 async function handleBlacklistCommands(message, args) {
-	if (args[0] == "!blacklist" && misc.memberIsMod(message)) {
-		if (args.length == 1) {
+	if (args[0] === "!blacklist" && misc.memberIsMod(message)) {
+		if (args.length === 1) {
 			let str = "Words on the blacklist: \n`";
 			for (let i = 0; i < blacklist.length; i++) {
 				str += blacklist[i] + "\n";
@@ -150,7 +150,7 @@ async function handleBlacklistCommands(message, args) {
 			str += "`";
 			return await message.channel.send(str);
 		}
-		else if (args.length > 1 && args[1] == "add") {
+		else if (args.length > 1 && args[1] === "add") {
 			if (args.length > 2) {
 				blacklist.push(args[2]);
 				fs.writeFileSync('./info/blacklist.json', JSON.stringify(blacklist), 'utf8');
@@ -158,7 +158,7 @@ async function handleBlacklistCommands(message, args) {
 			} else {
 				await message.channel.send("Usage: `!blacklist add word`");
 			}
-		} else if (args.length > 1 && args[1] == "remove") {
+		} else if (args.length > 1 && args[1] === "remove") {
 			if (args.length > 2) {
 				let ind = blacklist.indexOf(args[2]);
 				if (ind > -1) {
@@ -171,7 +171,7 @@ async function handleBlacklistCommands(message, args) {
 			} else {
 				await message.channel.send("Usage: `!blacklist remove word`");
 			}
-		} else if (args.length > 1 && args[1] == "violations") {
+		} else if (args.length > 1 && args[1] === "violations") {
 			if (args.length > 2) {
 				let user = censorshipUserByIdOrTag(args[2]);
 				if (user) {
@@ -188,7 +188,7 @@ async function handleBlacklistCommands(message, args) {
 			} else {
 				await message.channel.send("Usage: `!blacklist violations ID|Tag`");
 			}
-		} else if (args.length > 1 && args[1] == "warnings") {
+		} else if (args.length > 1 && args[1] === "warnings") {
 			if (args.length > 2) {
 				let user = censorshipUserByIdOrTag(args[2]);
 				if (user) {
@@ -206,7 +206,7 @@ async function handleBlacklistCommands(message, args) {
 				await message.channel.send("Usage: `!blacklist warnings ID|Tag`");
 			}
 		} 
-	} else if (args[0] == "!log" && misc.memberIsMod(message)) {
+	} else if (args[0] === "!log" && misc.memberIsMod(message)) {
 		let keys = Object.keys(censorshipInfo);
 		let str = "```";
 		for (let i = 0; i < keys.length; i++) {

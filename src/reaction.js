@@ -12,7 +12,7 @@ const misc = require("./misc.js");
 let removeReacts = true;
 const emojiRoleDict = {
 	// Nothing yet
-}
+};
 
 function emojiToRole(emojiName, messageID) {
 	let ret = emojiRoleDict[emojiName];
@@ -20,9 +20,9 @@ function emojiToRole(emojiName, messageID) {
 }
 
 async function handleReactionAdd(messageReaction, user, DiscordBot) {
-	if (messageReaction.message.channel.name == "role-assignment") { 
+	if (messageReaction.message.channel.name === "role-assignment") {
 		console.log(messageReaction.emoji.name);
-		if (messageReaction.emoji.name == "cgccWhite") {
+		if (messageReaction.emoji.name === "cgccWhite") {
 			console.log("Received cgccWhite react");
 			//add role emotes
 			removeReacts = false;

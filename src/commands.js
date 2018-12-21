@@ -50,35 +50,35 @@ helpString[1] += "`!spambots remove word' - Remove a string from the spambot fil
 
 
 async function modCommands(message, args) {
-	if (args[0] == "!members") {
+	if (args[0] === "!members") {
 		let memberList = message.guild.members.array();
 		let memberCount = message.guild.memberCount;
 		let onlineCount = 0;
 		for (let i = 0; i < memberList.length; i++) {
-			if (memberList[i].presence.status != "offline")
+			if (memberList[i].presence.status !== "offline")
 				onlineCount += 1;
 		}
 		return await message.channel.send(message.guild.name + " currently has " + memberCount + " total members. " + onlineCount + " members are currently online.");
-	} else if (args[0] == "!todo") {
-		if (args.length == 1) {
+	} else if (args[0] === "!todo") {
+		if (args.length === 1) {
 			let str = "Todo list:\n\n";
 			for (let i = 0; i < todoList.length; i++)
 				str += i.toString() + ": " + todoList[i] + "\n";
 			return await message.channel.send(str);
 		}
-		else if (args.length == 2) {
-			if (args[1] == "add")
+		else if (args.length === 2) {
+			if (args[1] === "add")
 				return await message.channel.send("Usage: `!todo add item`");
-			else if (args[1] == "remove")
+			else if (args[1] === "remove")
 				return await message.channel.send("Usage: `!todo remove item`");
 		} else if (args.length > 2) {
 			let task = message.content.substring(("!todo "+args[1]+" ").length);
-			if (args[1] == "add") {
+			if (args[1] === "add") {
 				todoList.push(task);
 				fs.writeFileSync('./info/todo.json', JSON.stringify(todoList, null, "\t"));
 				return await message.channel.send("Added `" + task + "` to the todo list.");
-			} else if (args[1] == "remove") {
-				if (Number(task) == NaN) {
+			} else if (args[1] === "remove") {
+				if (Number(task) === NaN) {
 					let ind = todoList.indexOf(task);
 					if (ind < 0) {
 						return await message.channel.send("Could not find `" + task + "` on the todo list.");
@@ -100,7 +100,7 @@ async function modCommands(message, args) {
 				}
 			}
 		}
-	} else if (args[0] == "!top") {
+	} else if (args[0] === "!top") {
 		if (args.length < 4) {
 			return await message.channel.send("USAGE: `!top PLACEMENTS QUANTITY_MESSAGES CHANNEL_NAME` -- For Example `!top 5 10000 general` would return the Top 5 posters over the last 10000 messages in #general.");
 		}
@@ -125,7 +125,7 @@ async function modCommands(message, args) {
 		let before = "";
 		for (let i = 0; i < quantity_messages; i++) {
 			let options = {limit: 100};
-			if (before != "")
+			if (before !== "")
 				options.before = before;
 				
 			let msgs = await relevant_channel.fetchMessages(options);
@@ -157,7 +157,7 @@ async function modCommands(message, args) {
 		}
 		console.log(str);
 		return await resultsMessage.edit(str);
-	} else if (args[0] == "!purge") {
+	} else if (args[0] === "!purge") {
 		if (args.length < 3)
 			return await message.channel.send("USAGE: `!purge CHANNEL QUANTITY` -- example: `!purge general 100` will delete the last 100 messages in #general.");
 
@@ -188,26 +188,26 @@ async function modCommands(message, args) {
 			}
 		}
 		return await mChannel.send(quantity_messages.toString() + " messages deleted from " + args[1] + ".");
-	} else if (args[0] == "!modhelp") {
+	} else if (args[0] === "!modhelp") {
 		let s = "Here are some commands I can do for Moderators:\n\n";
-		if (args.length == 1)
+		if (args.length === 1)
 			s += helpString[0];
 		else
 			s += helpString[parseInt(args[1])];
 		s += "`!help` - Commands for all users.\n";
 		s += "Try `!modhelp 0` or `!modhelp 1` for more commands.";
 		await message.channel.send(s);
-	} else if (args[0] == "!logfile") {
+	} else if (args[0] === "!logfile") {
 		await message.channel.send({
 			files: [{
 				attachment: "./info/censorshipInfo.csv",
 				name: "CgccLog.csv"
 			}]
 		});
-	} else if (args[0] == "!kill") {
+	} else if (args[0] === "!kill") {
 		console.log("Received !kill.");
 		process.exit(1);
-	} else if (args[0] == "!say") {
+	} else if (args[0] === "!say") {
 		
 		if (args.length < 3) {
 			return await message.channel.send("USAGE: `!say CHANNEL MESSAGE` -- example: `!say general Hello world!`");
@@ -229,7 +229,7 @@ async function modCommands(message, args) {
 		return await relevant_channel.send(message.content.substring(len));
 		
 	} 
-	else if (args[0] == "!remindme") {
+	else if (args[0] === "!remindme") {
 		if (args.length < 3) {
 			return await message.channel.send("USAGE EXAMPLE: `!remindme 3 unban ThatGuy#0001` - 72 hours (3 days) after posting this, I will send the message `unban ThatGuy#0001`.");
 		}
@@ -242,10 +242,10 @@ async function modCommands(message, args) {
 		} else {
 			return await message.channel.send("Invalid number of days provided.");
 		}
-	} else if (args[0] == "!emotelist") {
+	} else if (args[0] === "!emotelist") {
 		if (args.length > 1) {
 			let arr = [];
-			if (args[1] != "none") {
+			if (args[1] !== "none") {
 				let argsNorm = message.content.split(" ");
 				for (let i = 1; i < argsNorm.length; i++) {
 					arr.push(argsNorm[i]);
@@ -254,11 +254,11 @@ async function modCommands(message, args) {
 
 			fs.writeFileSync("./info/roleEmoji.json", JSON.stringify(arr), "utf8");
 
-			return await message.channel.send("Set emotelist to: " + arr.length == 0 ? "Empty." : arr.toString());
+			return await message.channel.send("Set emotelist to: " + arr.length === 0 ? "Empty." : arr.toString());
 		} else {
 			return await message.channel.send("Example usage: `!emotelist zhuW zhuW2 puffWhat`.");
 		}
-	} else if (args[0] == "!setcommand") {
+	} else if (args[0] === "!setcommand") {
 		if (args.length < 3) {
 			return await message.channel.send("USAGE: `!setcommand COMMAND_NAME text` -- For example the command `!setcommand controllers Here's some useful controller info!` would create a command `!controllers` that would print `Here's some useful controller info!`.");
 		} else {
@@ -277,7 +277,7 @@ async function modCommands(message, args) {
 					"command": commandPrefix + args[1],
 					"text": message.content.substring(args[0].length + args[1].length + 2),
 					"description": ""
-				}
+				};
 				userCommandList.push(toAdd);
 			}
 
@@ -285,20 +285,20 @@ async function modCommands(message, args) {
 			let s = exists ? "Modified " : "Created ";
 			return await message.channel.send(s + "the `" + commandPrefix + args[1] + "` command.");
 		}
-	} else if (args[0] == "!removecommand") {
+	} else if (args[0] === "!removecommand") {
 		if (args.length < 2) {
 			return await message.channel.send("USAGE: `!removecommand COMMAND_NAME` - For example `!removecommand controllers` would remove the `!controllers` command.");
 		}
 
 		for (let i = 0; i < userCommandList.length; i++) {
-			if (userCommandList[i].command == commandPrefix + args[1]) {
+			if (userCommandList[i].command === commandPrefix + args[1]) {
 				userCommandList.splice(i, 1);
 			}
 		}
 
 		fs.writeFileSync("./info/userCommands.json", JSON.stringify(userCommandList, null, "\t"), "utf8");
 		return await message.channel.send("Removed `" + commandPrefix + args[1] + "`.");
-	} else if (args[0] == "!describecommand") {
+	} else if (args[0] === "!describecommand") {
 		if (args.length < 3) {
 			return await message.channel.send("USAGE: `!describecommand COMMAND_NAME description` - For example `!describecommand controllers Controller support info.` would set the description of `!controllers` to `Controller support info.`");
 		}
@@ -306,7 +306,7 @@ async function modCommands(message, args) {
 		//first find the relevant element index
 		let index = -1;
 		for (let i = 0; i < userCommandList.length; i++) {
-			if (userCommandList[i].command == commandPrefix + args[1]) {
+			if (userCommandList[i].command === commandPrefix + args[1]) {
 				index = i;
 			}
 		}
@@ -319,17 +319,17 @@ async function modCommands(message, args) {
 		} else {
 			return await message.channel.send("Could not find `" + commandPrefix + args[1] + "`.");
 		}
-	} else if (args[0] == "!hidecommand") {
+	} else if (args[0] === "!hidecommand") {
 		if (args.length < 2)
 			return await message.channel.send("USAGE: `!hidecommand COMMANDNAME` ie to hide the `!ping` command type `!hidecommand ping`.");
-		if (args[1][0] == commandPrefix) //remove user-typed prefix if it exists
+		if (args[1][0] === commandPrefix) //remove user-typed prefix if it exists
 			args[1] = args[1].substring(1);
 		let index = -1;
 		for (let i = 0; i < userCommandList.length; i++) {
-			if (userCommandList[i].command == commandPrefix + args[1])
+			if (userCommandList[i].command === commandPrefix + args[1])
 				index = i;
 		}
-		if (index != -1) {
+		if (index !== -1) {
 			if (!userCommandList[index].hide)
 				userCommandList[index].hide = true;
 			else
@@ -340,13 +340,13 @@ async function modCommands(message, args) {
 			return await message.channel.send("Could not find the command `" + commandPrefix + args[1] + "`.");
 		}
 	}
-	else if (args[0] == "!helpcount") {
+	else if (args[0] === "!helpcount") {
 		let s = "Command usage stats:\n";
 		for (let i = 0; i < userCommandList.length; i++) {
 			s += "`" + userCommandList[i].command + "`: " + (userCommandList[i].count ? userCommandList[i].count.toString() : "0") + "\n";
 		}
 		return await message.channel.send(s);
-	} else if (args[0] == "!helphidden") {
+	} else if (args[0] === "!helphidden") {
 		let s = "Hidden help commands:\n";
 		for (let i = 0; i < userCommandList.length; i++) {
 			if (userCommandList[i].hide) {
@@ -354,13 +354,13 @@ async function modCommands(message, args) {
 			}
 		}
 		return await message.channel.send(s);
-	} else if (args[0] == "!addstreamer") {
+	} else if (args[0] === "!addstreamer") {
 		if (args.length < 3) {
 			return await message.channel.send("USAGE: `!addstreamer USER CHANNEL");
 		} else {
 			let exists = false;
 			for (let i = 0; i < streamerList.length; i++) {
-				if (streamerList[i].userID == args[1]) {
+				if (streamerList[i].userID === args[1]) {
 					streamerList[i].channel = args[2];
 					exists = true;
 				}
@@ -369,7 +369,7 @@ async function modCommands(message, args) {
 				let toAdd = {
 					"userID": args[1],
 					"channel": args[2]
-				}
+				};
 				streamerList.push(toAdd);
 			}
 
@@ -379,8 +379,8 @@ async function modCommands(message, args) {
 			return await message.channel.send(s + args[1] + s2 + "stream alerts! Check them out at twitch.tv/" + args[2]);
 		}
 	} 
-	else if (args[0] == "!spambots") {
-		if (args.length == 1) {
+	else if (args[0] === "!spambots") {
+		if (args.length === 1) {
 			let str = "Words on the spambot filter: \n`";
 			for (let i = 0; i < spamlist.length; i++) {
 				str += spamlist[i] + "\n";
@@ -388,7 +388,7 @@ async function modCommands(message, args) {
 			str += "`";
 			return await message.channel.send(str);
 		}
-		else if (args.length > 1 && args[1] == "add") {
+		else if (args.length > 1 && args[1] === "add") {
 			if (args.length > 2) {
 				spamlist.push(args[2]);
 				fs.writeFileSync('./info/spam.json', JSON.stringify(spamlist), 'utf8');
@@ -396,7 +396,7 @@ async function modCommands(message, args) {
 			} else {
 				await message.channel.send("Usage: `!spamlist add word`");
 			}
-		} else if (args.length > 1 && args[1] == "remove") {
+		} else if (args.length > 1 && args[1] === "remove") {
 			if (args.length > 2) {
 				let ind = spamlist.indexOf(args[2]);
 				if (ind > -1) {
@@ -415,7 +415,7 @@ async function modCommands(message, args) {
 
 async function userCommands(message, args) {
 	let userHelpString = "";
-	if (args[0] == "!help") {
+	if (args[0] === "!help") {
 		for (let i = 0; i < userCommandList.length; i++) {
 			if (!userCommandList[i].hide){
 				userHelpString += "`" + userCommandList[i].command + "` -  " + userCommandList[i].description + "\n";
@@ -423,7 +423,7 @@ async function userCommands(message, args) {
 		}
 		return await message.channel.send("Here's a list of commands for all users:\n" + userHelpString);
 	}
-	else if (args[0] == "!meme"){
+	else if (args[0] === "!meme"){
 		var ran = Math.floor(Math.random() * 242);
 		try {
 			return await message.channel.send({
@@ -439,7 +439,7 @@ async function userCommands(message, args) {
 	else if (args[0].startsWith(commandPrefix)) {
 		for (let i = 0; i < userCommandList.length; i++) {
 			//check through all defined userCommands
-			if (args[0] == userCommandList[i].command) {
+			if (args[0] === userCommandList[i].command) {
 				if (!userCommandList[i].count)
 					userCommandList[i].count = 0;
 				userCommandList[i].count += 1;

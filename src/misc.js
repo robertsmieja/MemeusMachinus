@@ -6,16 +6,12 @@
     Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 const fs = require("fs");
-const request = null;
 const uuid = require("uuid/v4");
 
 const ids = JSON.parse(fs.readFileSync("./info/ids.json", "utf8"));
 
 let reminders = JSON.parse(fs.readFileSync("./info/reminders.json", "utf8"));
-let intros = JSON.parse(fs.readFileSync("./info/intros.json", "utf8"));
 let mainGuild = null;
-
-let isCheckingVoice = false;
 
 function delay(t) {
 	return new Promise(function(resolve) { 
@@ -28,7 +24,7 @@ function addReminder(date, message) {
 		date: date,
 		message: message,
 		id: uuid()
-	}
+	};
 
 	reminders.push(o);
 	fs.writeFileSync("./info/reminders.json", JSON.stringify(reminders, null, "\t"), "utf8");
@@ -38,7 +34,7 @@ function addReminder(date, message) {
 function removeReminder(id) {
 	let indexToRemove = -1;
 	for (let i = 0; i < reminders.length; i++) {
-		if (reminders[i].id == id) {
+		if (reminders[i].id === id) {
 			indexToRemove = i;
 			break;
 		}
@@ -86,7 +82,7 @@ function memberHasRole(message, roleName) {
 
 function roleInRoles(roleName, roles) {
 	for (let i = 0; i < roles.length; i++) {
-		if (roles[i].name == roleName)
+		if (roles[i].name === roleName)
 			return true;
 	}
 	return false;
@@ -100,17 +96,6 @@ async function botReply(message, DiscordBot) {
 	let emote = DiscordBot.emojis.find("name", selectedName);
 		
 	return await message.channel.send(emote.toString());
-}
-
-function attachIsImage(msgAttach) {
-    let url = msgAttach.url;
-    //True if this url is a PNG or JPG image. Kind of hacky to ignore case
-    return ((url.indexOf("png", url.length - "png".length) != -1)
-	    || (url.indexOf("jpg", url.length - "jpg".length) != -1)
-	    || (url.indexOf("jpeg", url.length - "jpeg".length) != -1)
-		|| (url.indexOf("PNG", url.length - "PNG".length) != -1)
-	    || (url.indexOf("JPG", url.length - "JPG".length) != -1)
-	    || (url.indexOf("JPEG", url.length - "JPEG".length) != -1));
 }
 
 module.exports.delay = delay;
