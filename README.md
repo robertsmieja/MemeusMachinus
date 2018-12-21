@@ -17,7 +17,7 @@ MemeusMachinus is a Discord Bot powered by [discord.js](https://discord.js.org/)
 ## Usage
 MemeusMachinus is very particularly tailored to use within NFreak's server, but with a bit of work, you can bring it to your own server!
 
-/src/config.js will run upon running the bot, and will create the files you'll need to get it up and running. Populate these with the appropriate information and you'll be all set.
+/src/config.ts will run upon running the bot, and will create the files you'll need to get it up and running. Populate these with the appropriate information and you'll be all set.
 
 ## Credits
 MemeusMachinus was forked from Gifkin, and reworked and maintained by Tyler "NFreak" Morrow.

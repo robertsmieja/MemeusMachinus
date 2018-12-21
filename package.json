@@ -2,14 +2,30 @@
   "name": "cgccbot",
   "version": "1.0.0",
   "description": "A custom bot for the CustomGCC Discord Server.",
-  "main": "index.js",
+  "main": "lib/index",
+  "types": "lib/index",
   "scripts": {
-    "test": "node index.js"
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "start": "npm run build && node lib/app.js"
   },
   "author": "Adam Gincel",
   "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/node": "^10.12.18",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
+  },
   "dependencies": {
+    "@types/uuid": "^3.4.4",
     "discord.js": "^11.3.2",
-    "fs": "0.0.1-security"
+    "uuid": "latest"
   }
 }

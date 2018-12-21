@@ -6,9 +6,9 @@
     Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 
-const fs = require("fs");
+import fs from "fs";
 
-function configure() {
+export default function configure() {
 	let didConfigure = false;
 	if (!fs.existsSync("./info/blacklistIgnore.json")) {
 		didConfigure = true;
@@ -105,5 +105,3 @@ function configure() {
 		console.log("The bot may not work properly until the created files are populated with accurate information, if applicable.");
 	}
 }
-
-module.exports.configure = configure;

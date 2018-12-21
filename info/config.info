@@ -1,4 +1,4 @@
-For proper operation of this bot, this /info/ folder needs the following files. They will be created and populated with dummy information in some cases by ./src/config.js.
+For proper operation of this bot, this /info/ folder needs the following files. They will be created and populated with dummy information in some cases by ./src/config.ts.
 These are not included in the repo as they are obviously sensitive information.
 
 blacklist.json

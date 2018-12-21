@@ -5,3 +5,9 @@
 /img/meme/*
 /node_modules/
 *.sh
+
+#TypeScript
+lib/
+
+#WebStorm/IDEA
+.idea/

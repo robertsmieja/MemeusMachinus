@@ -5,31 +5,29 @@
 	Modified by Tyler "NFreak" Morrow for the NFreak Stream Discord.
 */
 
-//@ts-check
-
 //Node imports
-const fs = require("fs");
-const Discord = require("discord.js");
+import fs from 'fs';
+import Discord, {Message, MessageReaction, TextChannel, User} from 'discord.js';
 
 //Run configuration
-const config = require("./src/config.js");
-config.configure();
+import configure from "./config";
+configure();
 
 //Local imports
-const misc = require("./src/misc.js");
-const blacklist = require("./src/blacklist.js");
-const commands = require("./src/commands.js");
-const reaction = require("./src/reaction.js");
+import Misc from './misc';
+import Blacklist from './blacklist';
+import Commands from './commands';
+import Reaction from './reaction';
 
 //Read in Token
-const discordToken = fs.readFileSync("./info/discordToken.txt", "utf8").replace("\n", "");
+const discordToken = fs.readFileSync('./info/discordToken.txt', 'utf8').replace("\n", "");
 
 //Instance Data
 const utcHourToCheck = 23; //11pm EST
 let lastMessageDate = new Date();
 const updateCacheEvery = 500;
 let numMessages = 0;
-let mainGuild = null;
+export let mainGuild : any = null;
 
 //Intro text
 let intros = JSON.parse(fs.readFileSync("./info/intros.json", "utf8"));
@@ -47,32 +45,32 @@ const DiscordBot = new Discord.Client({
 
 
 //Executed upon a message being sent to any channel the bot can look at
-DiscordBot.on('message', async message => {
+DiscordBot.on('message', async (message: Message) => {
 	if (message.author.bot) return;
 	
 	let args = message.content.toLowerCase().split(" ");
 
 	//Mod specific handlers:
-	if (misc.memberIsMod(message)) {
-		await commands.modCommands(message, args);
-		await blacklist.handleBlacklistCommands(message, args);
+	if (Misc.memberIsMod(message)) {
+		await Commands.modCommands(message, args);
+		await Blacklist.handleBlacklistCommands(message, args);
 
 		//if (args[0] == "=refresh") //needs to use the DiscordBot object directly, so it's in index
 		//	await misc.cacheRoleMessages(DiscordBot);
 	}
 
 	// Check all messages for userCommands
-	await commands.userCommands(message, args);
+	await Commands.userCommands(message, args);
 
 	// If someone asks MemeusMachinus a question
 	if (message.isMemberMentioned(DiscordBot.user) && message.content[message.content.length - 1] == "?") {
-		await misc.botReply(message, DiscordBot);
+		await Misc.botReply(message, DiscordBot);
 	}
 	
 	//Handle all blacklist removal/warning
-	let censored = await blacklist.handleBlacklist(message, DiscordBot.user.tag);
+	let censored = await Blacklist.handleBlacklist(message, DiscordBot.user.tag);
 	if (!censored) {
-		await blacklist.handleBlacklistPotential(message, DiscordBot.user.tag);
+		await Blacklist.handleBlacklistPotential(message, DiscordBot.user.tag);
 	}
 
 	//Every `updateCacheEvery` messages, update the cache to hopefully ensure the reaction messages are never bumped out of cache
@@ -81,32 +79,32 @@ DiscordBot.on('message', async message => {
 	//	await misc.cacheRoleMessages(DiscordBot);
 	//}
 
-	let reminderToSend = misc.checkReminders();
+	let reminderToSend = Misc.checkReminders();
 	if (reminderToSend) {
-		let reminderChannel = mainGuild.channels.get(misc.ids.reminders);
+		let reminderChannel = mainGuild.channels.get(Misc.ids.reminders);
 		await reminderChannel.send(reminderToSend.message);
-		misc.removeReminder(reminderToSend.id);
+		Misc.removeReminder(reminderToSend.id);
 	}
 });
 
 //Executed upon a reaction being added to a message in the cache
-DiscordBot.on("messageReactionAdd", async (messageReaction, user) => {
-	await reaction.handleReactionAdd(messageReaction, user, DiscordBot);
+DiscordBot.on("messageReactionAdd", async (messageReaction: MessageReaction, user: User) => {
+	await Reaction.handleReactionAdd(messageReaction, user, DiscordBot);
 });
 
 //Executed upon a reaction being removed from a message in the cache
-DiscordBot.on("messageReactionRemove", async (messageReaction, user) => {
-	await reaction.handleReactionRemove(messageReaction, user, DiscordBot);
+DiscordBot.on("messageReactionRemove", async (messageReaction: MessageReaction, user : User) => {
+	await Reaction.handleReactionRemove(messageReaction, user, DiscordBot);
 });
 
 DiscordBot.on("voiceStateUpdate", async(oldMember, newMember) => {
-	await misc.manageVoiceChannels(newMember.guild);
-})
+	// await Misc.manageVoiceChannels(newMember.guild);
+});
 
 //Executed upon a new user joining the server
 DiscordBot.on('guildMemberAdd', async(member) => {
-	let introductionsChannel = DiscordBot.channels.get(misc.ids.introductions);
-	var rulesAndRoles = " You'll be granted a Member role very soon. Be sure to read through "+ DiscordBot.channels.get(misc.ids.rules) + "!";
+	let introductionsChannel = DiscordBot.channels.get(Misc.ids.introductions) as TextChannel;
+	var rulesAndRoles = " You'll be granted a Member role very soon. Be sure to read through "+ DiscordBot.channels.get(Misc.ids.rules) + "!";
 	var ran = Math.floor(Math.random() * intros.length);
 	
 	//Handle spambots and send intro messages
@@ -123,7 +121,7 @@ DiscordBot.on('guildMemberAdd', async(member) => {
 		setTimeout(() => {
 			member.addRole(member.guild.roles.find("name", "Bunch of nerds"));
 		}, 120000) // 2 minutes
-		await introductionsChannel.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
+		await introductionsChannel!.send(intros[ran] + "<@!" + member.id + ">" + "!" + rulesAndRoles);
 	}
 });
 
@@ -136,8 +134,8 @@ DiscordBot.login(discordToken).catch(function (reason) {
 
 //Executed upon successful login
 DiscordBot.on('ready', async () => {
-	mainGuild = DiscordBot.guilds.get(misc.ids.server);
-	misc.mainGuild = mainGuild;
+	mainGuild = DiscordBot.guilds.get(Misc.ids.server);
+	Misc.mainGuild = mainGuild;
 	console.log('MemeusMachinus is ready');
 	DiscordBot.setMaxListeners(0); //done to ensure it responds to everything regardless of how busy the server gets
 	await DiscordBot.user.setActivity("Type !help for commands!");
